@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="home" />
+
+    <item
+        android:id="@+id/navigation_report"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="report" />
+    <item
+        android:id="@+id/navigation_info"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="info" />
+</menu>
