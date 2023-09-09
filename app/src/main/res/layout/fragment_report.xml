@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ReportFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_report_title"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/img_logo_img"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/logo_lightbulb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="ImageContrastCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Report"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/img_logo_img"
+            app:layout_constraintTop_toTopOf="@id/img_logo_img"
+            app:layout_constraintBottom_toBottomOf="@id/img_logo_img"
+            android:layout_marginStart="10dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_report_total"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:padding="30dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_report_title">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09월 02주 기준"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최유빈 님의 치매 위험도"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center">
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="저위험"
+                />
+            <Button
+                style="?attr/materialButtonToggleGroupStyle"
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="의심군"
+                />
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위험군"
+                />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="부가 코멘트 들어갈 예정"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/layout_report_total"
+        app:layout_constraintStart_toStartOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_report_data1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/layout_report_data2">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_sleep"
+                style="?attr/materialCardViewOutlinedStyle"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cardview_running"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/img_sleep"
+                    android:alpha="0.5"
+                    android:layout_gravity="bottom|end"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="평균 수면 시간"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:text="5시간 45분"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:gravity="bottom"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="관련 세부정보"
+                        android:textSize="14sp"
+                        android:textColor="@color/md_theme_dark_outlineVariant"
+                        android:gravity="bottom"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_running"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="?attr/materialCardViewOutlinedStyle"
+                app:layout_constraintTop_toTopOf="@id/cardview_sleep"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cardview_sleep">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/img_running"
+                    android:alpha="0.5"
+                    android:layout_gravity="bottom|end"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="평균 활동 시간"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:text="5시간 45분"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:gravity="bottom"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="관련 세부정보"
+                        android:textSize="14sp"
+                        android:textColor="@color/md_theme_dark_outlineVariant"
+                        android:gravity="bottom"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_report_data2"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_report_data1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="10dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_heart"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="?attr/materialCardViewOutlinedStyle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cardview_habit"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/img_pulse"
+                    android:alpha="0.5"
+                    android:layout_gravity="bottom|end"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="평균 심박수"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:text="100 BPM"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:gravity="bottom"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="관련 세부정보"
+                        android:textSize="14sp"
+                        android:textColor="@color/md_theme_dark_outlineVariant"
+                        android:gravity="bottom"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_habit"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="?attr/materialCardViewFilledStyle"
+                app:layout_constraintTop_toTopOf="@id/cardview_heart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cardview_heart">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/img_groceries"
+                    android:alpha="0.5"
+                    android:layout_gravity="bottom|end"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="평균 습관 시간"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:text="건강 최고!"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:gravity="bottom"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="관련 세부정보"
+                        android:textSize="14sp"
+                        android:textColor="@color/md_theme_dark_outlineVariant"
+                        android:gravity="bottom"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

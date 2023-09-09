@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/menu_info"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/icon_holding_heart"
+        android:title="info" />
+    <item
+        android:id="@+id/menu_home"
+        android:enabled="true"
+        android:icon="@drawable/icon_home"
         android:title="home" />
 
     <item
-        android:id="@+id/navigation_report"
+        android:id="@+id/menu_report"
         android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/icon_chart"
         android:title="report" />
-    <item
-        android:id="@+id/navigation_info"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="info" />
+
 </menu>
