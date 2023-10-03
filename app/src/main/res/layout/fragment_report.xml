@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ReportFragment">
+    tools:context=".report.ReportFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_report_title"
@@ -114,7 +114,7 @@
             app:layout_constraintBottom_toTopOf="@id/layout_report_data2">
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardview_sleep"
-                style="?attr/materialCardViewOutlinedStyle"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:clickable="true"
@@ -159,11 +159,11 @@
             </com.google.android.material.card.MaterialCardView>
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardview_running"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:clickable="true"
                 android:focusable="true"
-                style="?attr/materialCardViewOutlinedStyle"
                 app:layout_constraintTop_toTopOf="@id/cardview_sleep"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cardview_sleep">
@@ -214,11 +214,11 @@
             android:padding="10dp">
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardview_heart"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:clickable="true"
                 android:focusable="true"
-                style="?attr/materialCardViewOutlinedStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/cardview_habit"
                 app:layout_constraintTop_toTopOf="parent">
@@ -231,39 +231,42 @@
                     android:layout_gravity="bottom|end"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="145dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="15dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="평균 심박수"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
                         android:text="100 BPM"
                         android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:layout_weight="1"
-                        android:gravity="bottom"/>
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="bottom"
                         android:text="관련 세부정보"
-                        android:textSize="14sp"
                         android:textColor="@color/md_theme_dark_outlineVariant"
-                        android:gravity="bottom"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardview_habit"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:clickable="true"
                 android:focusable="true"
-                style="?attr/materialCardViewFilledStyle"
                 app:layout_constraintTop_toTopOf="@id/cardview_heart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cardview_heart">

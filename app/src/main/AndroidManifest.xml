@@ -12,6 +12,24 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".report.ReportSleepActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".record.RecordHabitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".record.RecordHeartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".record.RecordFitnessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".record.RecordSleepActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingActivity"
             android:exported="false" />
         <activity
@@ -23,9 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"></activity>
     </application>
 
 </manifest>

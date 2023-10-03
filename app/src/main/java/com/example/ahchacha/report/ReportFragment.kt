@@ -1,4 +1,4 @@
-package com.example.ahchacha
+package com.example.ahchacha.report
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,13 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.ahchacha.SettingActivity
 import com.example.ahchacha.databinding.FragmentHomeBinding
-import com.example.ahchacha.record.RecordSleepActivity
+import com.example.ahchacha.databinding.FragmentReportBinding
 
-
-class HomeFragment : Fragment() {
-
-    private lateinit var binding: FragmentHomeBinding
+class ReportFragment : Fragment() {
+    private lateinit var binding: FragmentReportBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +21,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentReportBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -32,16 +31,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initLayout() {
-        binding.iconSetting.setOnClickListener {
-            val intent = Intent(context, SettingActivity::class.java)
+        binding.cardviewSleep.setOnClickListener {
+            val intent = Intent(context, ReportSleepActivity::class.java)
             startActivity(intent)
         }
-
-        binding.layoutRecordSleep.setOnClickListener {
-            val intent = Intent(context, RecordSleepActivity::class.java)
-            startActivity(intent)
-        }
-
-
     }
 }

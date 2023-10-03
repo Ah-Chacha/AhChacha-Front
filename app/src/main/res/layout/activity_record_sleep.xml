@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".record.RecordSleepActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_record_title"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/img_logo_img"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/logo_lightbulb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="ImageContrastCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sleep Record"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/img_logo_img"
+            app:layout_constraintTop_toTopOf="@id/img_logo_img"
+            app:layout_constraintBottom_toBottomOf="@id/img_logo_img"
+            android:layout_marginStart="10dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_record_start_sleep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_record_title">
+        <TextView
+            android:id="@+id/text_start_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취침 시작 시간"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="취침 시간 입력"
+            app:layout_constraintStart_toEndOf="@id/text_start_sleep"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_start_sleep"
+            app:layout_constraintBottom_toBottomOf="@id/text_start_sleep"
+            app:startIconDrawable = "@drawable/baseline_access_time_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_sleep_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_record_end_sleep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_record_start_sleep">
+        <TextView
+            android:id="@+id/text_end_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취침 종료 시간"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="취침 시간 입력"
+            app:layout_constraintStart_toEndOf="@id/text_end_sleep"
+            app:layout_constraintTop_toTopOf="@id/text_end_sleep"
+            app:layout_constraintBottom_toBottomOf="@id/text_end_sleep"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:startIconDrawable = "@drawable/baseline_access_time_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_sleep_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layout_record_end_sleep"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/text_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수면의 질"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="30dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/text_radio"
+            android:gravity="center_horizontal">
+
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="1"
+                android:layout_marginEnd="10dp"
+                android:textAlignment="center"
+                android:button="@null"
+                android:background="@drawable/sleep_rate_selector"/>
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="2"
+                android:textAlignment="center"
+                android:layout_marginEnd="10dp"
+                android:button="@null"
+                android:background="@drawable/sleep_rate_selector"/>
+            <RadioButton
+                android:id="@+id/radio3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="3"
+                android:textAlignment="center"
+                android:button="@null"
+                android:background="@drawable/sleep_rate_selector"/>
+            <RadioButton
+                android:id="@+id/radio4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="4"
+                android:layout_marginStart="10dp"
+                android:textAlignment="center"
+                android:button="@null"
+                android:background="@drawable/sleep_rate_selector"/>
+            <RadioButton
+                android:id="@+id/radio5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="5"
+                android:layout_marginStart="10dp"
+                android:textAlignment="center"
+                android:button="@null"
+                android:background="@drawable/sleep_rate_selector"/>
+
+
+
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_radio"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/text_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수면노트"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="30dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_chip"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:layout_marginTop="20dp"   >                                                                                                                                                        ">
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="악몽을 꿈"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="화장실 가느라 깸"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="이유없이 깸"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="호흡이 불편함"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="코골이가 심함"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="30dp"
+        android:text="저장"
+        android:textSize="16sp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

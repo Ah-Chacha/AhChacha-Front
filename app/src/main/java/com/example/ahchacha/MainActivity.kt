@@ -3,6 +3,8 @@ package com.example.ahchacha
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.ahchacha.databinding.ActivityMainBinding
+import com.example.ahchacha.report.ReportFragment
+import com.example.ahchacha.test.TestFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -24,9 +26,9 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.main_content, ReportFragment())
                             .commitAllowingStateLoss()
                     }
-                    R.id.menu_info -> {
+                    R.id.menu_test -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_content, InfoFragment())
+                        .replace(R.id.main_content, TestFragment())
                         .commitAllowingStateLoss()
                 }
                 }

@@ -35,7 +35,7 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/iconButton"
+            android:id="@+id/icon_setting"
             style="?attr/materialIconButtonStyle"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -95,6 +95,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp">
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_record_sleep"
                 android:layout_width="300dp"
                 android:layout_height="100dp"
                 android:background="@drawable/background_main_item">
