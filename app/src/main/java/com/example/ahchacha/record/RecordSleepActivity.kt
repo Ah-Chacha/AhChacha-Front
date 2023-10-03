@@ -1,38 +1,67 @@
 package com.example.ahchacha.record
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.accessibility.AccessibilityEventCompat.getRecord
 import com.example.ahchacha.databinding.ActivityRecordSleepBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.fitness.Fitness
+import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataPoint
+import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.data.DataType.TYPE_STEP_COUNT_DELTA
+import com.google.android.gms.fitness.request.DataReadRequest
+import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
-import java.util.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Calendar
+import java.util.Locale
+import java.util.concurrent.TimeUnit
+
 
 class RecordSleepActivity : AppCompatActivity() {
     lateinit var binding: ActivityRecordSleepBinding
+    private val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1
+
+    val TAG = "StepCounter"
+
+    val fitnessOptions = FitnessOptions.builder()
+        .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
+        .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+        .build()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecordSleepBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initLayout()
+        checkFitPermission()
     }
 
-//    private fun initLayout() {
-//        binding.text1.setOnClickListener {
-////            MaterialTimePicker.Builder().setInputMode(INPUT_MODE_CLOCK)
-//            val picker =
-//                MaterialTimePicker.Builder()
-//                    .setTimeFormat(TimeFormat.CLOCK_12H)
-//                    .setHour(12)
-//                    .setMinute(10)
-//                    .setTitleText("Select Appointment time")
-//                    .build()
-//        }
-//    }
+    private fun checkFitPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
+            != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                1);
+        }
+    }
+
 
     private fun initLayout() {
-
         binding.inputSleepStart.isFocusable = false
         binding.inputSleepStart.isFocusableInTouchMode = false
         binding.inputSleepStart.setOnClickListener {
@@ -42,7 +71,95 @@ class RecordSleepActivity : AppCompatActivity() {
             showTimePicker(binding.inputSleepEnd)
         }
 
-}
+        binding.btnLaunchFit.setOnClickListener {
+            launchFit()
+        }
+    }
+
+
+
+
+    private fun launchFit() {
+        val account = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
+
+        if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
+            GoogleSignIn.requestPermissions(
+                this, // your activity
+                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE, // e.g. 1
+                account,
+                fitnessOptions)
+        } else {
+            accessGoogleFit()
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            Activity.RESULT_OK -> when (requestCode) {
+                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> accessGoogleFit()
+                else -> {
+                    // Result wasn't from Google Fit
+                }
+            }
+            else -> {
+                // Permission not granted
+            }
+        }
+    }
+
+    private fun accessGoogleFit() {
+        val end = LocalDateTime.now()
+        val start = end.minusYears(1)
+        val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
+        val startSeconds = start.atZone(ZoneId.systemDefault()).toEpochSecond()
+
+        val readRequest = DataReadRequest.Builder()
+            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
+            .setTimeRange(startSeconds, endSeconds, TimeUnit.SECONDS)
+            .bucketByTime(1, TimeUnit.DAYS)
+            .build()
+
+        val account = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
+
+        Fitness.getHistoryClient(this, account)
+            .readData(readRequest)
+            .addOnSuccessListener({ response ->
+                // Use response data here
+                Log.i(TAG, "OnSuccess()")
+            })
+            .addOnFailureListener({ e -> Log.d(TAG, "OnFailure()", e) })
+
+        getFitData()
+
+    }
+
+    private fun getFitData() {
+// Read the data that's been collected throughout the past week.
+        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
+        val startTime = endTime.minusWeeks(1)
+        Log.i(TAG, "Range Start: $startTime")
+        Log.i(TAG, "Range End: $endTime")
+
+        val readRequest =
+            DataReadRequest.Builder()
+                .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .bucketByTime(1, TimeUnit.DAYS)
+                .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+                .build()
+
+        Fitness.getRecordingClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+            .subscribe(DataType.TYPE_STEP_COUNT_DELTA)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i(TAG, "Successfully subscribed!")
+                    readData()
+                } else {
+                    Log.w(TAG, "There was a problem subscribing.", task.exception)
+                }
+            }
+    }
 
     private fun showTimePicker(inputTime: TextInputEditText) {
 
@@ -71,4 +188,29 @@ class RecordSleepActivity : AppCompatActivity() {
 
         picker.show(supportFragmentManager, "timePicker")
     }
+
+    private fun readData() {
+        Fitness.getHistoryClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+            .readDailyTotal(DataType.TYPE_SLEEP_SEGMENT)
+            .addOnSuccessListener { dataSet ->
+                var userInputSteps = 0
+
+                for (dp in dataSet.dataPoints) {
+                    for (field in dp.dataType.fields) {
+                        Log.d("Stream Name : ", dp.originalDataSource.streamName)
+                        if (!"user_input".equals(dp.originalDataSource.streamName)) {
+                            val steps = dp.getValue(field).asInt()
+                            userInputSteps += steps
+                        }
+                    }
+                }
+
+                binding.textStepCnt.text = userInputSteps.toString()
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "There was a problem getting the step count.", e)
+            }
+
+    }
+
 }

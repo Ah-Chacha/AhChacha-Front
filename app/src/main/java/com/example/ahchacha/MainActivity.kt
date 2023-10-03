@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.ahchacha.databinding.ActivityMainBinding
 import com.example.ahchacha.report.ReportFragment
-import com.example.ahchacha.test.TestFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -12,6 +11,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.bottomNavigation.setSelectedItemId(R.id.menu_home)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_content, HomeFragment())
+            .commitAllowingStateLoss()
+
+
 
         binding.bottomNavigation.run {
             setOnItemSelectedListener { item ->

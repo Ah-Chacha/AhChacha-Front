@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".test.TestFragment">
+    tools:context=".TestFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_test_title"
@@ -78,6 +78,7 @@
         />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:text="검사 시작하기"
