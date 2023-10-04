@@ -34,12 +34,41 @@
             app:layout_constraintBottom_toBottomOf="@id/img_logo_img"
             android:layout_marginStart="10dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_launch_fit"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_record_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Google Fit에서 불러오기"
+        app:icon="@drawable/icon_google_fit"
+        app:iconTint="@android:color/transparent"
+        app:iconTintMode="add"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/text_layout_sleep_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수면 시간 기록"
+        android:textColor="@color/md_theme_light_primary"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/btn_launch_fit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_record_start_sleep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_record_title">
+        app:layout_constraintTop_toBottomOf="@id/text_layout_sleep_time">
+
         <TextView
             android:id="@+id/text_start_sleep"
             android:layout_width="wrap_content"
@@ -68,10 +97,6 @@
                 android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_record_end_sleep"
@@ -108,97 +133,94 @@
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_radio"
+        android:id="@+id/layout_record_total_sleep"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/layout_record_end_sleep"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="40dp">
-
+        app:layout_constraintTop_toBottomOf="@id/layout_record_end_sleep">
         <TextView
-            android:id="@+id/text_radio"
+            android:id="@+id/text_total_sleep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수면의 질"
+            android:text="총 수면 시간"
             android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="30dp"/>
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/text_total_sleep_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/text_radio"
-            android:gravity="center_horizontal">
+            android:text="n 시간 nn 분"
+            android:textColor="@color/md_theme_light_secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/text_total_sleep"
+            app:layout_constraintTop_toTopOf="@id/text_total_sleep"
+            app:layout_constraintBottom_toBottomOf="@id/text_total_sleep"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <RadioButton
-                android:id="@+id/radio1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="1"
-                android:layout_marginEnd="10dp"
-                android:textAlignment="center"
-                android:button="@null"
-                android:background="@drawable/sleep_rate_selector"/>
-            <RadioButton
-                android:id="@+id/radio2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="2"
-                android:textAlignment="center"
-                android:layout_marginEnd="10dp"
-                android:button="@null"
-                android:background="@drawable/sleep_rate_selector"/>
-            <RadioButton
-                android:id="@+id/radio3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="3"
-                android:textAlignment="center"
-                android:button="@null"
-                android:background="@drawable/sleep_rate_selector"/>
-            <RadioButton
-                android:id="@+id/radio4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="4"
-                android:layout_marginStart="10dp"
-                android:textAlignment="center"
-                android:button="@null"
-                android:background="@drawable/sleep_rate_selector"/>
-            <RadioButton
-                android:id="@+id/radio5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="5"
-                android:layout_marginStart="10dp"
-                android:textAlignment="center"
-                android:button="@null"
-                android:background="@drawable/sleep_rate_selector"/>
-
-
-
-        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_record_rem_sleep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_record_total_sleep">
+        <TextView
+            android:id="@+id/text_rem_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REM 수면 시간"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"/>
+
+        <TextView
+            android:id="@+id/input_rem_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Google Fit과 연동해주세요"
+            android:textColor="@color/md_theme_light_secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/text_rem_sleep"
+            app:layout_constraintTop_toTopOf="@id/text_rem_sleep"
+            app:layout_constraintBottom_toBottomOf="@id/text_rem_sleep"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/text_des_rem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REM 수면에 대한 설명. 치매에 어떤 영향을 주나요?"
+            android:textSize="14sp"
+            android:textColor="@color/md_theme_light_secondary"
+            app:layout_constraintStart_toStartOf="@id/text_rem_sleep"
+            app:layout_constraintTop_toBottomOf="@id/text_rem_sleep"
+            android:layout_marginTop="20dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_sleep_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_radio"
+        app:layout_constraintTop_toBottomOf="@+id/layout_record_rem_sleep"
         android:layout_marginTop="40dp">
 
         <TextView
             android:id="@+id/text_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수면노트"
-            android:textSize="16sp"
+            android:text="수면 방해 요인"
+            android:textColor="@color/md_theme_light_primary"
+            android:textStyle="bold"
+            android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="30dp"/>
@@ -212,26 +234,31 @@
             android:paddingEnd="30dp"
             android:layout_marginTop="20dp"   >                                                                                                                                                        ">
             <com.google.android.material.chip.Chip
+                android:id="@+id/nightmaresChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="악몽을 꿈"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/bathroomChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="화장실 가느라 깸"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/noReasonChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="이유없이 깸"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/breathingChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="호흡이 불편함"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/snoringChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.Chip.Suggestion"
@@ -241,29 +268,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_launch_fit"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@id/layout_sleep_note"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="30dp"
-        android:text="Google Fit에서 Data 불러오기"
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/text_step_cnt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btn_launch_fit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="걸음 수"/>
-
-    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_submit_sleep_record"
         android:layout_width="80dp"
         android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
