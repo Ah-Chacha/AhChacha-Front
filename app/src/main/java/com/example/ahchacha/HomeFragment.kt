@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.ahchacha.account.SettingActivity
 import com.example.ahchacha.databinding.FragmentHomeBinding
+import com.example.ahchacha.record.RecordFitnessActivity
 import com.example.ahchacha.record.RecordSleepActivity
 
 
@@ -39,6 +41,11 @@ class HomeFragment : Fragment() {
 
         binding.layoutRecordSleep.setOnClickListener {
             val intent = Intent(context, RecordSleepActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.layoutRecordFitness.setOnClickListener {
+            val intent = Intent(context, RecordFitnessActivity::class.java)
             startActivity(intent)
         }
 

@@ -211,7 +211,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_record_rem_sleep"
-        android:layout_marginTop="40dp">
+        app:layout_constraintBottom_toTopOf="@id/btn_submit_sleep_record">
 
         <TextView
             android:id="@+id/text_chip"
@@ -270,6 +270,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_submit_sleep_record"
+        style="@style/Widget.Material3.Button.TonalButton"
         android:layout_width="80dp"
         android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -277,7 +278,5 @@
         android:layout_margin="30dp"
         android:text="저장"
         android:textSize="16sp"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,7 @@
-package com.example.ahchacha
+package com.example.ahchacha.account
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.ahchacha.databinding.ActivityLoginBinding
 import com.example.ahchacha.databinding.ActivitySettingBinding
 
 class SettingActivity : AppCompatActivity() {

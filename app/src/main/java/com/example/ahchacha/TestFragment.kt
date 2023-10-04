@@ -35,6 +35,4 @@ class TestFragment : Fragment() {
             startActivity(intent)
         }
     }
-
-
 }
