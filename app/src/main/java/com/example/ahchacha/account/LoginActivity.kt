@@ -3,6 +3,7 @@ package com.example.ahchacha.account
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.ahchacha.GoogleFitActivitiy
 import com.example.ahchacha.MainActivity
 import com.example.ahchacha.databinding.ActivityLoginBinding
 
@@ -19,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initLayout() {
         binding.btnGoogle.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, GoogleFitActivitiy::class.java)
             startActivity(intent)
         }
     }

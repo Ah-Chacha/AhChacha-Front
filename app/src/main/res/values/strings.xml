@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">AhChacha</string>
+    <string name="app_name">아차차!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="server_client_id">988309699521-3hhap0pn21j47tvf323etr35jgdi42lm.apps.googleusercontent.com988309699521-3hhap0pn21j47tvf323etr35jgdi42lm.apps.googleusercontent.com</string>
+    <string name="server_client_id">988309699521-3hhap0pn21j47tvf323etr35jgdi42lm.apps.googleusercontent.com</string>
 
 </resources>

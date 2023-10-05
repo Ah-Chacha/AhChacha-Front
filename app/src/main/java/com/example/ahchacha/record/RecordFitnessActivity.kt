@@ -4,14 +4,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import com.example.ahchacha.R
 import com.example.ahchacha.databinding.ActivityRecordFitnessBinding
 import com.example.ahchacha.databinding.ActivityRecordSleepBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.fitness.Fitness
+import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataSource
+import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class RecordFitnessActivity : AppCompatActivity() {
     lateinit var binding: ActivityRecordFitnessBinding
@@ -22,6 +34,7 @@ class RecordFitnessActivity : AppCompatActivity() {
         binding = ActivityRecordFitnessBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_record_fitness)
         initLayout()
+        subscribeDataFromGoogle()
     }
 
     private fun initLayout() {
@@ -68,5 +81,69 @@ class RecordFitnessActivity : AppCompatActivity() {
     private fun getCurrentDate(): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return dateFormat.format(Calendar.getInstance().time)
+    }
+
+    val fitnessOptions = FitnessOptions.builder()
+        .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+        .addDataType(DataType.TYPE_HEART_RATE_BPM)
+        .build()
+    private fun subscribeDataFromGoogle() {
+        val recordingClient = Fitness.getRecordingClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+
+        recordingClient.subscribe(DataType.TYPE_STEP_COUNT_DELTA)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i("Step Subscribed", "Successfully subscribed!")
+                    val stepDataSource = DataSource.Builder()
+                        .setAppPackageName("com.google.android.gms")
+                        .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+                        .setType(DataSource.TYPE_DERIVED)
+                        .setStreamName("estimated_steps")
+                        .build()
+
+                    requestDataToGoogle(stepDataSource, "steps", Field.FIELD_STEPS)
+                } else {
+                    Log.w("Step Subscribed", "There was a problem subscribing.", task.exception)
+                }
+            }
+
+        recordingClient.subscribe(DataType.TYPE_HEART_RATE_BPM)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.i("HEART RATE Subscribed", "Successfully subscribed!")
+                    val heartDataSource = DataSource.Builder()
+                        .setAppPackageName("com.google.android.gms")
+                        .setDataType(DataType.TYPE_HEART_RATE_BPM)
+                        .setType(DataSource.TYPE_RAW)
+                        .setStreamName("estimated_heart")
+                        .build()
+
+                    requestDataToGoogle(heartDataSource, "heart rate", Field.FIELD_BPM)
+                } else {
+                    Log.w("Step Subscribed", "There was a problem subscribing.", task.exception)
+                }
+            }
+    }
+
+    private fun requestDataToGoogle(dataSource: DataSource, dataType: String, fieldType: Field) {
+        val startTime = LocalDate.now().atStartOfDay(ZoneId.systemDefault())
+        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
+
+        val request = DataReadRequest.Builder()
+            .aggregate(dataSource)
+            .bucketByTime(1, TimeUnit.DAYS)
+            .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+            .build()
+
+        Fitness.getHistoryClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+            .readData(request)
+            .addOnSuccessListener { response ->
+                val value = response.buckets
+                    .flatMap { it.dataSets }
+                    .flatMap { it.dataPoints }
+                    .sumBy { it.getValue(fieldType).asInt() }
+                Log.i("GET VALUE", "$dataType: $value")
+            }
+            .addOnFailureListener({ e -> Log.i("VALUE ERROR", "$dataType", e) })
     }
 }

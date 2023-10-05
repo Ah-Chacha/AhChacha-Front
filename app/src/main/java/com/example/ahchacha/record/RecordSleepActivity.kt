@@ -1,6 +1,5 @@
 package com.example.ahchacha.record
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,9 +20,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.request.DataReadRequest
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
@@ -36,17 +36,16 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class RecordSleepActivity : AppCompatActivity() {
     lateinit var binding: ActivityRecordSleepBinding
-    private val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1
     var sleepTimeMillis:Long = 0
     var remTimeMillis:Long =0
     var sleepData = SleepData(sleepTimeMillis, remTimeMillis, emptyList(), getCurrentDate())
 
-    val TAG = "StepCounter"
     val RC_SIGN_IN = 2
 
     private var retrofit: Retrofit = RetrofitHelper.getRetrofitInstance()
@@ -60,8 +59,9 @@ class RecordSleepActivity : AppCompatActivity() {
         binding = ActivityRecordSleepBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initLayout()
-        checkFitPermission()
+//        checkFitPermission()
         postToServer()
+        requestDataToGoogle()
     }
     private fun initLayout() {
         binding.inputSleepStart.isFocusable = false
@@ -76,7 +76,7 @@ class RecordSleepActivity : AppCompatActivity() {
         }
 
         binding.btnLaunchFit.setOnClickListener {
-            launchFit()
+//            launchFit()
         }
 
         binding.btnSubmitSleepRecord.setOnClickListener {
@@ -133,128 +133,76 @@ class RecordSleepActivity : AppCompatActivity() {
         })
     }
 
-
-    //---functions for get google fit data---
-    //지금은 fit data 연동 test 위해서 step_count data 가져옴.
-    //안드로이드용 fit API 사용한 걸 -> REST API 를 사용해서, 백 단에서 처리한 데이터를 get 하는 작업 필요.
-
+    val RC_REQUEST_SLEEP_AND_CONTINUE_SUBSCRIPTION = 77
     val fitnessOptions = FitnessOptions.builder()
-        .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
-        .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+        .accessSleepSessions(FitnessOptions.ACCESS_READ)
+        .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_READ)
         .build()
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (resultCode) {
-            Activity.RESULT_OK -> when (requestCode) {
-                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> accessGoogleFit()
-                else -> {
-                    // Result wasn't from Google Fit
-                }
-            }
-            else -> {
-                // Permission not granted
-            }
-        }
-    }
-    private fun checkFitPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
-            != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                1);
-        }
-    }
+    private fun requestDataToGoogle() {
 
-    private fun launchFit() {
-        val account = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
 
-        if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
-            GoogleSignIn.requestPermissions(
-                this, // your activity
-                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE, // e.g. 1
-                account,
-                fitnessOptions)
-        } else {
-            accessGoogleFit()
-        }
+        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
+        val startTime = endTime.minusMonths(1)
+        val sessionsClient = Fitness.getSessionsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
 
-        getGoogleToken()
-    }
-    private fun accessGoogleFit() {
-        val end = LocalDateTime.now()
-        val start = end.minusYears(1)
-        val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
-        val startSeconds = start.atZone(ZoneId.systemDefault()).toEpochSecond()
+        val SLEEP_STAGE_NAMES = arrayOf(
+            "Unused",
+            "Awake (during sleep)",
+            "Sleep",
+            "Out-of-bed",
+            "Light sleep",
+            "Deep sleep",
+            "REM sleep"
+        )
 
-        val readRequest = DataReadRequest.Builder()
-            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
-            .setTimeRange(startSeconds, endSeconds, TimeUnit.SECONDS)
-            .bucketByTime(1, TimeUnit.DAYS)
+        val request = SessionReadRequest.Builder()
+            .readSessionsFromAllApps()
+            // By default, only activity sessions are included, so it is necessary to explicitly
+            // request sleep sessions. This will cause activity sessions to be *excluded*.
+            .includeSleepSessions()
+            // Sleep segment data is required for details of the fine-granularity sleep, if it is present.
+            .read(DataType.TYPE_SLEEP_SEGMENT)
+            .setTimeInterval(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
             .build()
 
-        val account = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
+        sessionsClient
+            .readSession(request)
+            .addOnSuccessListener { response ->
+                Log.i("SLEEEP DATA", "Sleep success!!!!!")
 
-        Fitness.getHistoryClient(this, account)
-            .readData(readRequest)
-            .addOnSuccessListener({ response ->
-                // Use response data here
-                Log.i(TAG, "OnSuccess()")
-            })
-            .addOnFailureListener({ e -> Log.d(TAG, "OnFailure()", e) })
+                for (session in response.sessions) {
+//                    val sessionStart = convertEpochTimeToHourMinute(session.getStartTime(TimeUnit.MILLISECONDS))
+//                    val sessionEnd = convertEpochTimeToHourMinute(session.getEndTime(TimeUnit.MILLISECONDS))
+//                    Log.i("SLEEEP DATA", "Sleep between $sessionStart and $sessionEnd")
 
-        getFitData()
+                    // If the sleep session has finer granularity sub-components, extract them:
+                    val dataSets = response.getDataSet(session)
+                    for (dataSet in dataSets) {
+                        for (point in dataSet.dataPoints) {
+                            val sleepStageVal = point.getValue(Field.FIELD_SLEEP_SEGMENT_TYPE).asInt()
+                            val sleepStage = SLEEP_STAGE_NAMES[sleepStageVal]
 
+                            val sessionStartMillis = session.getStartTime(TimeUnit.MILLISECONDS)
+                            val sessionEndMillis = session.getEndTime(TimeUnit.MILLISECONDS)
+                            val sessionStartDate = convertEpochTimeToHourMinute(sessionStartMillis)
+                            val sessionEndDate = convertEpochTimeToHourMinute(sessionEndMillis)
+                            Log.i("SLEEEP DATA", "Sleep between $sessionStartDate and $sessionEndDate")
 
-    }
-    private fun getFitData() {
-    // Read the data that's been collected throughout the past week.
-        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
-        val startTime = endTime.minusWeeks(1)
-        Log.i(TAG, "Range Start: $startTime")
-        Log.i(TAG, "Range End: $endTime")
-
-        val readRequest =
-            DataReadRequest.Builder()
-                .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .bucketByTime(1, TimeUnit.DAYS)
-                .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
-                .build()
-
-        Fitness.getRecordingClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
-            .subscribe(DataType.TYPE_STEP_COUNT_DELTA)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.i(TAG, "Successfully subscribed!")
-                    readData()
-                } else {
-                    Log.w(TAG, "There was a problem subscribing.", task.exception)
-                }
-            }
-    }
-    private fun readData() {
-        //read fit data
-        Fitness.getHistoryClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
-            .readDailyTotal(DataType.TYPE_SLEEP_SEGMENT)
-            .addOnSuccessListener { dataSet ->
-                var userInputSteps = 0
-
-                for (dp in dataSet.dataPoints) {
-                    for (field in dp.dataType.fields) {
-                        Log.d("Stream Name : ", dp.originalDataSource.streamName)
-                        if (!"user_input".equals(dp.originalDataSource.streamName)) {
-                            val steps = dp.getValue(field).asInt()
-                            userInputSteps += steps
+//                            val segmentStart = point.getStartTime(TimeUnit.MILLISECONDS)
+//                            val segmentEnd = point.getEndTime(TimeUnit.MILLISECONDS)
                         }
                     }
                 }
-
-//                binding.textStepCnt.text = userInputSteps.toString()
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "There was a problem getting the step count.", e)
+                Log.i("SLEEEP DATA", "Failure Response: ", e)
             }
+    }
 
+    private fun convertEpochTimeToHourMinute(epochMillis: Long): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val date = Date(epochMillis)
+        return dateFormat.format(date)
     }
 
 
@@ -331,29 +279,5 @@ class RecordSleepActivity : AppCompatActivity() {
     }
 
     //---functions for getting Google Token---
-    private fun getGoogleToken() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.server_client_id))
-            .requestEmail()
-            .build()
 
-
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.silentSignIn()
-            .addOnCompleteListener(this) { task ->
-                handleSignInResult(task)
-            }
-    }
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-            val idToken = account?.idToken
-            Log.i(TAG, "idToken: $idToken")
-
-//            updateUI(account)
-        } catch (e: ApiException) {
-            Log.w(TAG, "handleSignInResult:error", e)
-//            updateUI(null)
-        }
-    }
 }
