@@ -20,9 +20,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.data.SleepStages
 import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -83,6 +85,10 @@ class RecordSleepActivity : AppCompatActivity() {
             saveSleepData()
         }
     }
+
+    private fun insertData(){
+        //need to insert
+    }
     private fun saveSleepData() {
         val currentDate = getCurrentDate()
 
@@ -136,10 +142,11 @@ class RecordSleepActivity : AppCompatActivity() {
     val RC_REQUEST_SLEEP_AND_CONTINUE_SUBSCRIPTION = 77
     val fitnessOptions = FitnessOptions.builder()
         .accessSleepSessions(FitnessOptions.ACCESS_READ)
+        .accessSleepSessions(FitnessOptions.ACCESS_WRITE)
         .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_READ)
+        .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_WRITE)
         .build()
     private fun requestDataToGoogle() {
-
 
         val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
         val startTime = endTime.minusMonths(1)
@@ -198,7 +205,6 @@ class RecordSleepActivity : AppCompatActivity() {
                 Log.i("SLEEEP DATA", "Failure Response: ", e)
             }
     }
-
     private fun convertEpochTimeToHourMinute(epochMillis: Long): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val date = Date(epochMillis)
